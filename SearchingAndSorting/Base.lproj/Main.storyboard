@@ -45,7 +45,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="GD8-UW-jOO">
-                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="l3c-vk-V0b"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="l3c-vk-V0b">
+                            <connections>
+                                <action selector="searchButtonHit:" destination="aAT-kk-Uyi" id="Bna-2X-H9e"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Q3l-hM-6Ph" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -110,5 +110,53 @@ class MovieListViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    @IBAction func searchButtonHit(sender: UIBarButtonItem) {
+        
+        let alertController = UIAlertController(title: "Movie List", message: "Select Sort Option", preferredStyle: .ActionSheet)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+            print(action)
+        }
+        alertController.addAction(cancelAction)
+        
+        let titleAction = UIAlertAction(title: "Sort by Title", style: .Default) { (action) in
+            
+            self.movieList.sortInPlace {
+                
+                let movie1:Movie = $0
+                let movie2:Movie = $1
+                
+                return movie1.title.localizedCaseInsensitiveCompare(movie2.title) == NSComparisonResult.OrderedAscending
+                
+            }
+            
+            self.tableView.reloadData()
+    
+        }
+        alertController.addAction(titleAction)
+        
+        let grossAction = UIAlertAction(title: "Sort by Gross", style: .Default) { (action) in
+            
+            self.movieList.sortInPlace {
+                
+                let movie1:Movie = $0
+                let movie2:Movie = $1
+                
+                return movie1.grossing < movie2.grossing
+                
+            }
+            
+            self.tableView.reloadData()
+        }
+        alertController.addAction(grossAction)
+    
+        
+        self.presentViewController(alertController, animated: true) {
+        
+        }
+        
+
+    }
 
 }
