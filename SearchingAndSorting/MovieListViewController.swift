@@ -26,17 +26,22 @@ class MovieListViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
-        movieList.append( Movie(titleValue: "Star Wars",grossingValue: 128382.23) )
-        movieList.append( Movie(titleValue: "All is Lost",grossingValue: 5832.43) )
-        movieList.append( Movie(titleValue: "Peanuts",grossingValue: 382.91) )
-        movieList.append( Movie(titleValue: "Steve Jobs",grossingValue: 78282.21) )
-        
+        self.loadInitialMovies()
         
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func loadInitialMovies() {
+        movieList = [Movie]()
+        movieList.append( Movie(titleValue: "Star Wars",grossingValue: 128382.23) )
+        movieList.append( Movie(titleValue: "All is Lost",grossingValue: 5832.43) )
+        movieList.append( Movie(titleValue: "Peanuts",grossingValue: 382.91) )
+        movieList.append( Movie(titleValue: "Steve Jobs",grossingValue: 78282.21) )
+        movieList.append( Movie(titleValue: "War of the Worlds",grossingValue: 212.21) )
     }
 
     // MARK: - Table view data source
@@ -113,12 +118,21 @@ class MovieListViewController: UITableViewController {
     
     @IBAction func searchButtonHit(sender: UIBarButtonItem) {
         
-        let alertController = UIAlertController(title: "Movie List", message: "Select Sort Option", preferredStyle: .ActionSheet)
+        let alertController = UIAlertController(title: "Movie List", message: "Select Sort Option", preferredStyle: .Alert)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
             print(action)
         }
         alertController.addAction(cancelAction)
+        
+        let clearAction = UIAlertAction(title: "Clear", style: .Default) { (action) in
+            print(action)
+            self.loadInitialMovies()
+            self.tableView.reloadData()
+            
+        }
+        alertController.addAction(clearAction)
+        
         
         let titleAction = UIAlertAction(title: "Sort by Title", style: .Default) { (action) in
             
@@ -151,6 +165,24 @@ class MovieListViewController: UITableViewController {
         }
         alertController.addAction(grossAction)
     
+        let searchAction = UIAlertAction(title: "Search", style: .Default) { (_) in
+            let searchTextField = alertController.textFields![0] as UITextField
+            
+            var filteredArray:[Movie] = self.movieList
+            
+            filteredArray = filteredArray.filter() { nil != $0.title.rangeOfString(searchTextField.text!) }
+            
+            print("searching found \(filteredArray.count)")
+            self.movieList = filteredArray
+            self.tableView.reloadData()
+        }
+        searchAction.enabled = true
+        alertController.addAction(searchAction)
+        
+        alertController.addTextFieldWithConfigurationHandler { (textField) in
+            textField.placeholder = "Enter Something Here"
+            textField.secureTextEntry = false
+        }
         
         self.presentViewController(alertController, animated: true) {
         
